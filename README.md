@@ -1,5 +1,7 @@
 # Route Tracker Commander DLC
 
+**English** | [Polski](README.pl.md)
+
 This standalone repository contains only the extension sources, project, tests and documentation. It does not contain the EDDiscovery application source tree.
 
 Downloads: [Route Tracker Commander 1.1.0](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.0).
