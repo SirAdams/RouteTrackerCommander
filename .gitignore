@@ -1,0 +1,8 @@
+bin/
+obj/
+packages/
+host19/
+host20/
+smoke/
+original-host20-source/
+OriginalHost20.csproj
