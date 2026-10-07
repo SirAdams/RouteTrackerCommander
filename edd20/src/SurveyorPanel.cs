@@ -31,6 +31,7 @@ namespace EDDiscovery.UserControls
         public CommanderSurveyorPanel()
         {
             InitializeComponent();
+            InitializeCopyRouteTargetButton();
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
 
             DBBaseName = "Surveyor";

@@ -4,7 +4,7 @@
 
 To samodzielne repozytorium zawiera wyłącznie źródła dodatku, projekt kompilacji, testy i dokumentację. Nie zawiera drzewa źródeł głównego programu EDDiscovery.
 
-Pobieranie: [Route Tracker Commander 1.1.0](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.0).
+Pobieranie: [Route Tracker Commander 1.1.1](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.1).
 
 Dodatek DLL do EDDiscovery dodaje osobny panel **Route Tracker — Commander**. Nie wymaga podmiany pliku EDDiscovery.exe ani bibliotek programu.
 
@@ -16,6 +16,8 @@ Dostępne są dwie osobne paczki:
 Obie paczki zawierają plik RouteTrackerCommander.dll. Zainstaluj wyłącznie wariant pasujący do Twojego EDDiscovery. Dodatek sprawdza wersję programu podczas inicjalizacji.
 
 ## Możliwości
+
+- Ikona kopiowania na pasku panelu pozwala ponownie skopiować widoczny cel trasy po nadpisaniu schowka przez inną aplikację. Działa także przy wyłączonym automatycznym kopiowaniu, nie przesuwa postępu trasy i jest nieaktywna, gdy nie ma celu.
 
 - Wybrana zapisana trasa lub Nav Route, postęp trasy i opcje panelu są zapisywane osobno dla każdego komandera.
 - Zmiana komandera przywraca jego trasę i ustawienia. Komander bez zapisanej trasy widzi pusty panel.
@@ -59,10 +61,10 @@ MSBuild RouteTrackerCommander.csproj /t:Rebuild /p:TargetHost=edd20 /p:HostDir="
 
 ## Testy
 
-Każdy wariant przeszedł 55 sprawdzeń, obejmujących rozdzielenie komanderów, pusty widok, postęp trasy, ponowne otwieranie, nieprawidłowe pozycje, wywołania podczas startu, wyładowanie i ponowne załadowanie DLL, nieudaną inicjalizację oraz odrzucenie niewłaściwej wersji programu. Oba warianty sprawdzono również podczas rzeczywistego uruchomienia niezmodyfikowanego EDDiscovery, inicjalizacji DLL, otwierania panelu i zamykania programu, na osobnych bazach testowych. Bieżące skoki w grze nadal wymagają sprawdzenia przez użytkowników.
+Każdy wariant przeszedł 65 sprawdzeń, obejmujących rozdzielenie komanderów, pusty widok, postęp trasy, ponowne otwieranie, nieprawidłowe pozycje, wywołania podczas startu, wyładowanie i ponowne załadowanie DLL, nieudaną inicjalizację oraz odrzucenie niewłaściwej wersji programu. Oba warianty sprawdzono również podczas rzeczywistego uruchomienia niezmodyfikowanego EDDiscovery, inicjalizacji DLL, otwierania panelu i zamykania programu, na osobnych bazach testowych. Bieżące skoki w grze nadal wymagają sprawdzenia przez użytkowników.
 
 Testy znajdują się w katalogu tests każdego wariantu oraz w tests/StartupSmoke.cs. Nie korzystają z bazy użytkownika. Paczki do pobrania nie zawierają programów testowych ani baz danych.
 
 ## Licencja i pochodzenie
 
-Apache License 2.0; zobacz LICENSE.md. Kod panelu wywodzi się z EDDiscovery i zachowuje oryginalne informacje o prawach autorskich. Wariant dla EDDiscovery 19 bazuje na Release_19.1.11 (a3cbe2190779ea4dcd186db55aeb3f4fa1baccb9); wariant 20 na masterze f9af793b8e4055cc384868fc902efd1c2900a8f0. Jest to dodatek społeczności, a nie oficjalne wydanie EDDiscovery.
+Apache License 2.0; zobacz LICENSE.md. Kod panelu wywodzi się z EDDiscovery i zachowuje oryginalne informacje o prawach autorskich. Wariant dla EDDiscovery 19 bazuje na Release_19.1.11 (a3cbe2190779ea4dcd186db65aeb3f4fa1baccb9); wariant 20 na masterze f9af793b8e4055cc384868fc902efd1c2900a8f0. Jest to dodatek społeczności, a nie oficjalne wydanie EDDiscovery.

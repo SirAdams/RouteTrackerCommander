@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
             try
             {
                 // Invalidate the previous commander's route before reloading controls.
+                SetDisplayedRouteTarget(null);
                 currentRoute = null;
                 manualTarget = -1;
                 lastsystemonroute = null;

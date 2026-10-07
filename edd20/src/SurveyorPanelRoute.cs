@@ -162,6 +162,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
+            SetDisplayedRouteTarget(closest?.nextsystem?.Name);
             extPictureBoxRoute.ClearImageList();
 
             Point pos = new Point(3, 20);
@@ -250,6 +251,7 @@ namespace EDDiscovery.UserControls
         private void LoadRoute(string name, int manualpos = -1)
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Order load of route '{name}'");
+            SetDisplayedRouteTarget(null);
             lastsystemonroute = null;
             PutSetting(dbRouteName, name);      // store back the current name - this is used to wipe out a route with LoadRoute("")
 

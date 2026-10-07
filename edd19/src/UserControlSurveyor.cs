@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
         public CommanderSurveyorPanel()
         {
             InitializeComponent();
+            InitializeCopyRouteTargetButton();
             DBBaseName = "Surveyor";
         }
         protected override void Init()
@@ -562,6 +563,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
+            SetDisplayedRouteTarget(comp?.nextsystem?.Name);
             extPictureBoxRoute.ClearImageList();
 
             Point pos = new Point(3, 20);
@@ -1482,6 +1484,7 @@ namespace EDDiscovery.UserControls
         private void LoadRoute(string name, int manualpos = -1)
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Order load of route '{name}'");
+            SetDisplayedRouteTarget(null);
             lastsystemonroute = null;
             PutSetting(dbRouteName, name);      // store back the current name
 

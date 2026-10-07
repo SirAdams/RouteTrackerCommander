@@ -140,6 +140,31 @@ class Tests {
  Assert(!((System.Windows.Forms.Control)Field(surveyor,"extPictureBoxRoute")).Visible,"Surveyor without a route has no route message");
  }
  using(var legacy=new UserControlCommonBase()){legacy.DBBaseName="RouteTracker";Assert(legacy.GetSetting("route","")=="","Original tracker untouched");}
+ using(var clipboardPanel=new CommanderRouteTracker()) {
+ Call(clipboardPanel,"ApplyCommander",7,true);
+ string copied=null;int copyCount=0;Action<string> writer=s=>{copied=s;copyCount++;};
+ var copyMethod=typeof(CommanderSurveyorPanel).GetMethod("CopyDisplayedRouteTarget",hidden);
+ Func<bool> copy=()=> (bool)copyMethod.Invoke(clipboardPanel,new object[]{writer});
+ Assert(!copy() && copyCount==0,"Empty profile leaves clipboard untouched");
+ Call(clipboardPanel,"LoadRoute","Alpha",1);
+ Assert(!copy(),"New route cannot copy a stale target before drawing");
+ SetField(clipboardPanel,"routecontrolsettings","");
+ var here=new EliteDangerousCore.SystemClass(0,0,0,"Sol");
+ SetField(clipboardPanel,"cur_sys",here);Call(clipboardPanel,"DrawRoute",here);
+ Assert(((System.Windows.Forms.Control)Field(clipboardPanel,"copyRouteTargetButton")).Enabled,"Copy button enabled for displayed waypoint");
+ Assert(copy() && copied=="Next","Manual copy uses displayed waypoint with auto-copy disabled");
+ copied="Overwritten";
+ Assert(copy() && copied=="Next" && copyCount==2,"Same waypoint can be copied again after clipboard overwrite");
+ Assert((int)Field(clipboardPanel,"manualTarget")==1,"Copy does not advance route progress");
+ SetField(clipboardPanel,"manualTarget",2);Call(clipboardPanel,"DrawRoute",here);
+ Assert(copy() && copied=="End","Changed displayed waypoint replaces copied target");
+ Call(clipboardPanel,"DrawRoute",(object)null);
+ Assert(!copy(),"Missing current position clears target");
+ Call(clipboardPanel,"DrawRoute",here);Call(clipboardPanel,"LoadRoute","Beta",-1);
+ Assert(!copy(),"Switching route clears previous target");
+ Call(clipboardPanel,"DrawRoute",here);Call(clipboardPanel,"ApplyCommander",8,false);
+ Assert(!copy() && !((System.Windows.Forms.Control)Field(clipboardPanel,"copyRouteTargetButton")).Enabled,"Commander switch clears and disables copy");
+ }
  Console.WriteLine("PASS: "+checks+" assertions; isolated database: "+folder);
  }
 }

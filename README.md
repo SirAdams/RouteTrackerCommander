@@ -4,7 +4,7 @@
 
 This standalone repository contains only the extension sources, project, tests and documentation. It does not contain the EDDiscovery application source tree.
 
-Downloads: [Route Tracker Commander 1.1.0](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.0).
+Downloads: [Route Tracker Commander 1.1.1](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.1).
 
 Standalone managed DLL extension for EDDiscovery. Adds **Route Tracker — Commander** as a separate native panel. No replacement of EDDiscovery.exe or host libraries is required.
 
@@ -15,6 +15,8 @@ Two separate packages are available:
 Both packages contain a file named RouteTrackerCommander.dll. Install only the one matching your host. The extension checks the host version during initialization.
 
 ## Features
+
+- A toolbar copy icon lets you copy the displayed route target again after another application overwrites the clipboard. It works with auto-copy disabled, does not advance the route and is disabled when no target is available.
 
 - Selected saved route or Nav Route, route progress and panel options are saved separately for each commander.
 - Switching commanders restores their route and settings. A commander with no saved route sees an explicit empty state.
@@ -58,10 +60,10 @@ Sources are split into edd19/src and edd20/src because EDDiscovery 20 changes th
 
 ## Validation
 
-Each variant passes 55 standalone assertions, including commander isolation, empty state, route progress, reopening, invalid positions, startup callbacks, unload/reload, failed initialization and wrong-host rejection. Both were also tested with the actual unmodified host startup, DLL initialization, native panel display and shutdown, using isolated test databases. Live game jumps still benefit from user testing.
+Each variant passes 65 standalone assertions, including commander isolation, empty state, route progress, reopening, invalid positions, startup callbacks, unload/reload, failed initialization and wrong-host rejection. Both were also tested with the actual unmodified host startup, DLL initialization, native panel display and shutdown, using isolated test databases. Live game jumps still benefit from user testing.
 
 Tests are in each variant's tests folder, plus tests/StartupSmoke.cs. Test fixtures do not use the user's database. No test executable or database is included in the download packages.
 
 ## License and origin
 
-Apache License 2.0; see LICENSE.md. Panel code is derived from EDDiscovery, with original copyright notices retained. The EDDiscovery 19 variant is based on Release_19.1.11 (a3cbe2190779ea4dcd186db55aeb3f4fa1baccb9); the 20 variant follows master f9af793b8e4055cc384868fc902efd1c2900a8f0. This is a community extension, not an official EDDiscovery release.
+Apache License 2.0; see LICENSE.md. Panel code is derived from EDDiscovery, with original copyright notices retained. The EDDiscovery 19 variant is based on Release_19.1.11 (a3cbe2190779ea4dcd186db65aeb3f4fa1baccb9); the 20 variant follows master f9af793b8e4055cc384868fc902efd1c2900a8f0. This is a community extension, not an official EDDiscovery release.
