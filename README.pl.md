@@ -4,7 +4,7 @@
 
 To samodzielne repozytorium zawiera wyłącznie źródła dodatku, projekt kompilacji, testy i dokumentację. Nie zawiera drzewa źródeł głównego programu EDDiscovery.
 
-Pobieranie: [Route Tracker Commander 1.1.1](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.1).
+Pobieranie: [Route Tracker Commander 1.1.2](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.2).
 
 Dodatek DLL do EDDiscovery dodaje osobny panel **Route Tracker — Commander**. Nie wymaga podmiany pliku EDDiscovery.exe ani bibliotek programu.
 
@@ -41,6 +41,18 @@ Definicje zapisanych tras pozostają wspólne. Wybrana trasa i ustawienia jej ś
 Panel DLC musi pozostać otwarty, aby śledzić bieżące skoki; możesz przełączyć się na inną zakładkę. Zamknięcie lub usunięcie panelu zatrzymuje jego śledzenie do ponownego otwarcia. Zdarzenia i historia są dostarczane przez EDDiscovery.
 
 Nie kopiuj katalogów host/reference/test ze źródeł do EDDiscovery. Instalowany jest tylko RouteTrackerCommander.dll. Paczki nie zawierają pełnego programu EDDiscovery.
+
+## Sprawdzanie aktualizacji
+
+Ikona odświeżania na pasku panelu sprawdza wydania tego repozytorium na GitHubie i szuka nowszego ZIP-a odpowiadającego wersji EDDiscovery. Sprawdzanie działa w tle przy otwieraniu panelu oraz co 12 godzin, gdy panel pozostaje otwarty. Zapytania są współdzielone między panelami i mają limit czasu 15 sekund. Błąd połączenia nie przerywa śledzenia trasy.
+
+Gdy dostępne jest nowsze pasujące wydanie, na ikonie pojawia się wykrzyknik. Kliknij ją, aby zobaczyć wersję i otworzyć stronę wydania. Jeśli aktualizacja nie jest jeszcze znana, kliknięcie ponawia sprawdzanie. Prawym przyciskiem myszy wybierz **Check now** albo wyłącz **Automatically check for updates**. Ta opcja jest wspólna dla komanderów i zapisywana w bazie użytkownika EDDiscovery.
+
+Wydania testowe są uwzględniane i oznaczane. Nowsze wydanie bez paczki dla właściwej wersji programu jest pomijane. Sprawdzanie korzysta z publicznego API GitHuba, bez wysyłania danych komandera, dzienników ani tras; GitHub nadal otrzymuje zwykłe informacje o połączeniu, takie jak adres IP. Logowanie ani token GitHuba nie są wymagane.
+
+Ta funkcja sprawdza dostępność i prowadzi do pobierania; nie pobiera, nie instaluje ani nie podmienia DLL automatycznie. Zamknij EDDiscovery przed instalacją aktualizacji. Główny program nie wymaga zmian.
+
+Logika wyboru wydań ma 19 dodatkowych sprawdzeń offline w tests/UpdateTests.cs. Skompiluj test razem z shared/ReleaseChecker.cs, z referencjami System.Net.Http.dll i System.Web.Extensions.dll. Test nie łączy się z GitHubem.
 
 ## Aktualizacja i usuwanie
 

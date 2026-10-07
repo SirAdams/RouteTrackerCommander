@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             InitializeCopyRouteTargetButton();
+            InitializeUpdateButton();
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
 
             DBBaseName = "Surveyor";
@@ -76,6 +77,7 @@ namespace EDDiscovery.UserControls
 
         protected override void InitialDisplay()
         {
+            StartUpdateChecks();
             DrawRoute(cur_sys);
             RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update
             SetVisibility();
@@ -84,6 +86,7 @@ namespace EDDiscovery.UserControls
 
         protected override void Closing()
         {
+            StopUpdateChecks();
             if (DiscoveryForm == null) return;
             drawsystemupdatetimer?.Stop();
 

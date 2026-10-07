@@ -4,7 +4,7 @@
 
 This standalone repository contains only the extension sources, project, tests and documentation. It does not contain the EDDiscovery application source tree.
 
-Downloads: [Route Tracker Commander 1.1.1](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.1).
+Downloads: [Route Tracker Commander 1.1.2](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.2).
 
 Standalone managed DLL extension for EDDiscovery. Adds **Route Tracker — Commander** as a separate native panel. No replacement of EDDiscovery.exe or host libraries is required.
 
@@ -40,6 +40,18 @@ Saved route definitions remain shared. Only the selected route and its tracking 
 Keep the DLC panel open to track live jumps; selecting another tab is fine. Closing/removing the panel stops its tracking until reopened. Normal events and history are supplied by EDDiscovery.
 
 Do not copy the host/reference/test folders from the source tree into EDDiscovery. Only RouteTrackerCommander.dll is installed. These packages do not contain a full EDDiscovery distribution.
+
+## Update checks
+
+The toolbar refresh icon checks this repository's GitHub releases for a newer ZIP matching your EDDiscovery version. It checks in the background when the panel opens and every 12 hours while it remains open. Requests are shared between panels and have a 15-second timeout. Network failures do not interrupt route tracking.
+
+A newer matching release adds an exclamation mark to the icon. Click it to view the version and open the release page. When no update is known, clicking checks again. Right-click for **Check now** or to disable **Automatically check for updates**. That preference is shared across commanders and saved in EDDiscovery's user database.
+
+Preview releases are included and labelled. A newer release without a matching host package is ignored. Checking contacts the public GitHub API without sending commander, journal or route data; GitHub still receives ordinary connection information such as your IP address. No GitHub login or token is required.
+
+This feature checks and links to downloads; it does not automatically download, install or replace DLLs. Close EDDiscovery before installing an update. The main program does not need modification.
+
+Selection logic has 19 additional offline assertions in tests/UpdateTests.cs. Compile that test with shared/ReleaseChecker.cs and references to System.Net.Http.dll and System.Web.Extensions.dll; it does not contact GitHub.
 
 ## Upgrade and remove
 
