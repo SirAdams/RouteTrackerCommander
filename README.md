@@ -4,7 +4,7 @@
 
 This standalone repository contains only the extension sources, project, tests and documentation. It does not contain the EDDiscovery application source tree.
 
-Downloads: [Route Tracker Commander 1.1.2](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.2).
+Downloads: [Route Tracker Commander 1.1.3](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.3).
 
 Standalone managed DLL extension for EDDiscovery. Adds **Route Tracker — Commander** as a separate native panel. No replacement of EDDiscovery.exe or host libraries is required.
 
