@@ -4,7 +4,7 @@
 
 To samodzielne repozytorium zawiera wyłącznie źródła dodatku, projekt kompilacji, testy i dokumentację. Nie zawiera drzewa źródeł głównego programu EDDiscovery.
 
-Pobieranie: [Route Tracker Commander 1.1.2](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.2).
+Pobieranie: [Route Tracker Commander 1.1.3](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.3).
 
 Dodatek DLL do EDDiscovery dodaje osobny panel **Route Tracker — Commander**. Nie wymaga podmiany pliku EDDiscovery.exe ani bibliotek programu.
 
