@@ -35,7 +35,7 @@ namespace RouteTrackerCommander
             {
                 client.Timeout = TimeSpan.FromSeconds(15);
                 client.MaxResponseContentBufferSize = 1024 * 1024;
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("RouteTrackerCommander/1.1.2");
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("RouteTrackerCommander/1.1.3");
                 client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
                 return await client.GetStringAsync("https://api.github.com/repos/SirAdams/RouteTrackerCommander/releases?per_page=30").ConfigureAwait(false);
             }

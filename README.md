@@ -16,6 +16,8 @@ Both packages contain a file named RouteTrackerCommander.dll. Install only the o
 
 ## Features
 
+- Uses the original EDDiscovery Route Tracker icon in the panel selector.
+
 - A toolbar copy icon lets you copy the displayed route target again after another application overwrites the clipboard. It works with auto-copy disabled, does not advance the route and is disabled when no target is available.
 
 - Selected saved route or Nav Route, route progress and panel options are saved separately for each commander.

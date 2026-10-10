@@ -1,6 +1,6 @@
 using System;using System.Linq;using System.Windows.Forms;using EDDiscovery;using EDDiscovery.UserControls;
 using IF=EDDDLLInterfaces.EDDDLLIF;
-[assembly:System.Reflection.AssemblyVersion("1.1.2.0")]
+[assembly:System.Reflection.AssemblyVersion("1.1.3.0")]
 [assembly:System.Reflection.AssemblyTitle("Route Tracker Commander")]
 [assembly:System.Reflection.AssemblyDescription("Standalone commander-specific Route Tracker for EDDiscovery")]
 namespace RouteTrackerCommander {
@@ -13,12 +13,12 @@ namespace RouteTrackerCommander {
    Version hostVersion;var match=System.Text.RegularExpressions.Regex.Match(flags ?? "",@"^\d+\.\d+\.\d+(?:\.\d+)?");
    if(!Version.TryParse(match.Value,out hostVersion)|| !(hostVersion.Major==20)) return "!This Route Tracker Commander DLL requires EDDiscovery 20.x. Install the matching package.";
    var form=ResolveHost(callbacks);if(form==null)return "!EDDiscovery main window unavailable";
-   RegisterPanel(form);return "1.1.2.0";
+   RegisterPanel(form);return "1.1.3.0";
   }
   private static void RegisterPanel(EDDiscoveryForm form) {
    int id=EDDConfig.Instance.FindCreatePanelID("RouteTrackerCommander.Native");
    form.AddPanel(id,typeof(CommanderRouteTracker),null,"Route Tracker — Commander","RouteTrackerCommander",
-    "Route Tracker with separate routes and settings for each commander",System.Drawing.SystemIcons.Application.ToBitmap(),false);
+    "Route Tracker with separate routes and settings for each commander",PanelInformation.PanelTypeIcons[PanelInformation.PanelIDs.RouteTracker],false);
   }
  }
 }

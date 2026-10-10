@@ -17,6 +17,8 @@ Obie paczki zawierają plik RouteTrackerCommander.dll. Zainstaluj wyłącznie wa
 
 ## Możliwości
 
+- Korzysta z oryginalnej ikony Route Tracker w selektorze paneli EDDiscovery.
+
 - Ikona kopiowania na pasku panelu pozwala ponownie skopiować widoczny cel trasy po nadpisaniu schowka przez inną aplikację. Działa także przy wyłączonym automatycznym kopiowaniu, nie przesuwa postępu trasy i jest nieaktywna, gdy nie ma celu.
 
 - Wybrana zapisana trasa lub Nav Route, postęp trasy i opcje panelu są zapisywane osobno dla każdego komandera.
