@@ -6,17 +6,18 @@ This standalone repository contains only the extension sources, project, tests a
 
 ## Downloads
 
-| Package | DLL scan |
+[Download from the releases page](https://github.com/SirAdams/RouteTrackerCommander/releases/)
+
+Choose the package matching your EDDiscovery version: EDD19.x or EDD20.x. Matching source snapshots and checksums are available on the same releases page.
+
+### VirusTotal reports — version 1.1.4
+
+| DLL variant | Scan report |
 | --- | --- |
-| [1.1.4 — EDD19.x](https://github.com/SirAdams/RouteTrackerCommander/releases/) | [VirusTotal](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
-| [1.1.4 — EDD19.1.11 compatibility alias](https://github.com/SirAdams/RouteTrackerCommander/releases/) | [Same DLL report](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
-| [1.1.4 — EDD20.x](https://github.com/SirAdams/RouteTrackerCommander/releases/) | [VirusTotal](https://www.virustotal.com/gui/file/2f917424a13904f8d4545c066c0edf5ddc29e0e6c322a4c1b4dd50896b77d766) |
+| EDD19.x | [VirusTotal](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
+| EDD20.x | [VirusTotal](https://www.virustotal.com/gui/file/2f917424a13904f8d4545c066c0edf5ddc29e0e6c322a4c1b4dd50896b77d766) |
 
-The two 19-series ZIPs are identical. The legacy name lets existing update checkers discover this migration release. Future 19-series updates retain this compatibility alias. DLL SHA-256: `ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551`.
-
-[EDD20.x matching source ZIP](https://github.com/SirAdams/RouteTrackerCommander/releases/) or [source tag v1.1.4-edd20](https://github.com/SirAdams/RouteTrackerCommander/tree/v1.1.4-edd20). For the 19-series package, use the original v1.1.4 source tag. Each build manifest links its exact source commit.
-
-EDD20 DLL SHA-256: `2f917424a13904f8d4545c066c0edf5ddc29e0e6c322a4c1b4dd50896b77d766`. Its completed VirusTotal analysis also reports 0 malicious, 0 suspicious, 71 undetected and 4 unsupported engines.
+The legacy EDD19.1.11 package is an identical compatibility alias for older update checkers. For source verification, version 1.1.4 uses source tag `v1.1.4` for EDD19 and `v1.1.4-edd20` for EDD20. Each build manifest records the exact source commit and DLL SHA-256.
 
 Standalone managed DLL extension for EDDiscovery. Adds **Route Tracker — Commander** as a separate native panel. No replacement of EDDiscovery.exe or host libraries is required.
 
