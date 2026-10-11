@@ -97,7 +97,7 @@ Sources are split into edd19/src and edd20/src because EDDiscovery 20 changes th
 
 ## Validation
 
-Each updated variant additionally passes 511 geometry equivalence/cache checks and 9 asynchronous queue checks. It passed actual unmodified 19.1.11 host startup, DLL initialization, hidden-panel restoration, original-icon and shutdown checks. The geometry tests cover duplicate names, missing coordinates, off-route positions and manual selection. Full-history search semantics are retained.
+Each updated variant additionally passes 511 geometry equivalence/cache checks and 9 asynchronous queue checks. The matching unmodified hosts (19.1.11.0 and development 20.0.0.0) passed startup, DLL initialization, hidden-panel restoration, original-icon and shutdown checks. The geometry tests cover duplicate names, missing coordinates, off-route positions and manual selection. Full-history search semantics are retained.
 
 Each variant passes 65 standalone assertions, including commander isolation, empty state, route progress, reopening, invalid positions, startup callbacks, unload/reload, failed initialization and wrong-host rejection. Both were also tested with the actual unmodified host startup, DLL initialization, native panel display and shutdown, using isolated test databases. Live game jumps still benefit from user testing.
 

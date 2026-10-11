@@ -98,7 +98,7 @@ MSBuild RouteTrackerCommander.csproj /t:Rebuild /p:TargetHost=edd20 /p:HostDir="
 
 ## Testy
 
-Każdy zaktualizowany wariant przeszedł dodatkowo 511 sprawdzeń geometrii/cache oraz 9 kolejki asynchronicznej. Test z oryginalnym EDDiscovery 19.1.11 potwierdził uruchomienie, inicjalizację DLL, odtworzenie ukrytego panelu, ikonę i zamknięcie. Sprawdzono powtarzające się nazwy, brakujące współrzędne, pozycje poza trasą i tryb ręczny. Zachowano dotychczasową semantykę wyszukiwania historii.
+Każdy zaktualizowany wariant przeszedł dodatkowo 511 sprawdzeń geometrii/cache oraz 9 kolejki asynchronicznej. Testy z właściwymi oryginalnymi hostami 19.1.11.0 oraz deweloperskim 20.0.0.0 potwierdziły uruchomienie, inicjalizację DLL, odtworzenie ukrytego panelu, ikonę i zamknięcie. Sprawdzono powtarzające się nazwy, brakujące współrzędne, pozycje poza trasą i tryb ręczny. Zachowano dotychczasową semantykę wyszukiwania historii.
 
 Każdy wariant przeszedł 65 sprawdzeń, obejmujących rozdzielenie komanderów, pusty widok, postęp trasy, ponowne otwieranie, nieprawidłowe pozycje, wywołania podczas startu, wyładowanie i ponowne załadowanie DLL, nieudaną inicjalizację oraz odrzucenie niewłaściwej wersji programu. Oba warianty sprawdzono również podczas rzeczywistego uruchomienia niezmodyfikowanego EDDiscovery, inicjalizacji DLL, otwierania panelu i zamykania programu, na osobnych bazach testowych. Bieżące skoki w grze nadal wymagają sprawdzenia przez użytkowników.
 
