@@ -7,7 +7,8 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 
 // Compile with edd19/src/*.cs and shared/*.cs, the real EDD19 references,
-// /target:exe /main:OptimizationTests. Pass the EDD19 installation directory
+// For EDD20 use edd20/src/*.cs, matching references and /define:EDD20.
+// /target:exe /main:OptimizationTests. Pass the matching installation directory
 // as argument 1. This suite neither starts a host nor initializes its database.
 internal static class OptimizationTests
 {
@@ -70,7 +71,11 @@ internal static class OptimizationTests
 
     private static ISystem Here(string name, double x, double y = 0)
     {
+#if EDD20
+        return new SystemClass(x, y, 0, name);
+#else
         return new SystemClass(name, null, x, y, 0);
+#endif
     }
 
     private static string Name(ISystem system)

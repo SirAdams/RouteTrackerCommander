@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    closest = currentRoute.ClosestTo(sys, currentRouteManualTarget);
+                    closest = GetRouteClosest(sys);
 
                     if (closest == null)  // if null, no systems found.. uh oh
                     {
@@ -61,7 +61,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        double routedistance = currentRoute.CumulativeDistance();       // total distance
+                        double routedistance = GetRouteDistance();       // total distance
 
                         double distleft = closest.disttowaypoint + (closest.deviation < 0 ? 0 : closest.cumulativewpdist);
 
@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls
                                     jumpmsg = ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".Tx() : "jumps".Tx());
                             }
                             else
-                                jumpmsg = " No Ship FSD Information".Tx();
+                                jumpmsg = " " + (" No Ship FSD Information".Tx()).Trim();
                         }
 
                         string wpposmsg = "";
@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
                         }
                         else
                         {
-                            lastroutetext += String.Format(", Left {0:N1}ly".Tx(), distleft) + Environment.NewLine;
+                            lastroutetext = RouteTrackerCommander.RouteText.Append(lastroutetext, String.Format(", Left {0:N1}ly".Tx(), distleft)) + Environment.NewLine;
 
                             if (distleft == 0)
                                 lastroutetext += $"{closest.nextsystem.Name}";
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
                             lastroutetext += wpposmsg + jumpmsg;
 
                             if (IsSet(RouteControl.showdeviation) && closest.deviation > 0)
-                                lastroutetext += String.Format(", Dev {0:N1}ly".Tx(), closest.deviation);
+                                lastroutetext = RouteTrackerCommander.RouteText.Append(lastroutetext, String.Format(", Dev {0:N1}ly".Tx(), closest.deviation));
                         }
 
                         //System.Diagnostics.Debug.WriteLine(lastroutetext);
@@ -163,6 +163,7 @@ namespace EDDiscovery.UserControls
             }
 
             SetDisplayedRouteTarget(closest?.nextsystem?.Name);
+            if (!ShouldRenderRoute(lastroutetext, closest != null)) return;
             extPictureBoxRoute.ClearImageList();
 
             Point pos = new Point(3, 20);
@@ -248,12 +249,19 @@ namespace EDDiscovery.UserControls
             dropdown.Show(this.FindForm());
         }
 
-        private void LoadRoute(string name, int manualpos = -1)
+        private void LoadRoute(string name, int manualpos = -1) { LoadRouteCore(name, manualpos, true); }
+
+        private void LoadRouteCore(string name, int manualpos, bool persist)
         {
+            InvalidateRouteGeometry();
+            bool previousLoading = loadingCommander;
+            loadingCommander = true;
+            try
+            {
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Order load of route '{name}'");
             SetDisplayedRouteTarget(null);
             lastsystemonroute = null;
-            PutSetting(dbRouteName, name);      // store back the current name - this is used to wipe out a route with LoadRoute("")
+
 
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} In DB its now '{GetSetting(dbRouteName,"???")}'");
 
@@ -271,7 +279,7 @@ namespace EDDiscovery.UserControls
                     {
                         // pick out x/y/z to fill in route so it does not need any system lookup
                         var systems = route.Route.Where(x => x.StarSystem.HasChars()).
-                                Select(rt => new SavedRouteClass.SystemEntry(rt.StarSystem, "", rt.StarPos.X, rt.StarPos.Y, rt.StarPos.Z)).ToList();
+                                Select(rt => new SavedRouteClass.SystemEntry(rt.StarSystem,"",rt.StarPos.X,rt.StarPos.Y,rt.StarPos.Z)).ToList();
 
                         currentRoute = new SavedRouteClass(translatednavroutename, systems);      // with an ID of -1 note, used to detect navroutes
                         currentRouteManualTarget = currentRoute != null && manualpos >= 0 && manualpos < currentRoute.Systems.Count ? manualpos : -1;
@@ -296,6 +304,13 @@ namespace EDDiscovery.UserControls
             else
             {
                 //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} No route wanted '{name}'");
+            }
+            }
+            finally { loadingCommander = previousLoading; }
+            if (persist && commanderId >= 0)
+            {
+                if (GetSetting(dbRouteName, "") != name) PutSetting(dbRouteName, name);
+                if (GetSetting(dbRouteManualPos, -1) != manualTarget) PutSetting(dbRouteManualPos, manualTarget);
             }
         }
 

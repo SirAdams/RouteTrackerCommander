@@ -93,9 +93,9 @@ namespace EDDiscovery.UserControls
         // See if manual target needs updating
         private void CheckManualTarget()
         {
-            if (currentRoute != null)
+            if (currentRoute != null && currentRouteManualTarget >= 0)
             {
-                var knownsystems = currentRoute.SystemsWithCoordinates();
+                var knownsystems = GetRouteSystems();
 
                 if (currentRouteManualTarget >= 0 && currentRouteManualTarget < knownsystems.Count - 1)        // paranoia
                 {
@@ -114,7 +114,7 @@ namespace EDDiscovery.UserControls
         private int currentRouteManualTarget
         {
             get { return manualTarget; }
-            set { manualTarget = value; if (commanderId >= 0 && !loadingCommander) PutSetting(dbRouteManualPos, value); }
+            set { if (manualTarget == value) return; manualTarget = value; if (commanderId >= 0 && !loadingCommander) PutSetting(dbRouteManualPos, value); }
         }      // current route manual target
 
 

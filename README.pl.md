@@ -10,10 +10,13 @@ To samodzielne repozytorium zawiera wyłącznie źródła dodatku, projekt kompi
 | --- | --- |
 | [1.1.4 — EDD19.x](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD19.x.zip) | [VirusTotal](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
 | [1.1.4 — alias zgodności EDD19.1.11](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD19.1.11.zip) | [Ten sam raport DLL](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
+| [1.1.4 — EDD20.x](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD20.x.zip) | [VirusTotal](https://www.virustotal.com/gui/file/2f917424a13904f8d4545c066c0edf5ddc29e0e6c322a4c1b4dd50896b77d766) |
 
-Obie paczki są identyczne. Stara nazwa pozwala wcześniejszym updaterom wykryć wydanie przejściowe. W kolejnych wydaniach 19.x zachowujemy ten alias zgodności. SHA-256 DLL: `ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551`.
+Obie paczki serii 19 są identyczne. Stara nazwa pozwala wcześniejszym updaterom wykryć wydanie przejściowe. W kolejnych wydaniach 19.x zachowujemy ten alias zgodności. SHA-256 DLL: `ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551`.
 
-[EDDiscovery 20.x — poprzednie wydanie 1.1.3](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.3). Wersja 1.1.4 aktualizuje tylko paczkę dla serii 19.
+[Źródła odpowiadające paczce EDD20.x](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD20.x-source.zip) lub [tag źródeł v1.1.4-edd20](https://github.com/SirAdams/RouteTrackerCommander/tree/v1.1.4-edd20). Dla paczki serii 19 właściwy jest pierwotny tag v1.1.4. Manifest każdej kompilacji wskazuje jej dokładny commit źródeł.
+
+SHA-256 DLL EDD20: `2f917424a13904f8d4545c066c0edf5ddc29e0e6c322a4c1b4dd50896b77d766`. Zakończona analiza VirusTotal również wykazała 0 wyników złośliwych, 0 podejrzanych, 71 bez wykrycia i 4 nieobsługiwane silniki.
 
 Dodatek DLL do EDDiscovery dodaje osobny panel **Route Tracker — Commander**. Nie wymaga podmiany pliku EDDiscovery.exe ani bibliotek programu.
 
@@ -26,7 +29,7 @@ Obie paczki zawierają plik RouteTrackerCommander.dll. Zainstaluj wyłącznie wa
 
 Analiza VirusTotal z 2026-10-12: 0 wykryć złośliwych, 0 podejrzanych, 71 wyników bez wykrycia; 4 silniki nie obsługiwały typu pliku. Raport dotyczy DLL zawartej w paczce, nie ZIP-a.
 
-## Zmiany w 1.1.4 (19.x)
+## Zmiany w 1.1.4 (19.x i 20.x)
 
 - Zapamiętywanie geometrii i długości trasy przy niezmienionej pozycji i trasie.
 - Rysowanie tylko zmienionego tekstu oraz odtwarzanie ukrytych elementów po pokazaniu panelu.
@@ -95,7 +98,7 @@ MSBuild RouteTrackerCommander.csproj /t:Rebuild /p:TargetHost=edd20 /p:HostDir="
 
 ## Testy
 
-Aktualizacja 19.x przeszła dodatkowo 511 sprawdzeń geometrii/cache oraz 9 kolejki asynchronicznej. Test z oryginalnym EDDiscovery 19.1.11 potwierdził uruchomienie, inicjalizację DLL, odtworzenie ukrytego panelu, ikonę i zamknięcie. Sprawdzono powtarzające się nazwy, brakujące współrzędne, pozycje poza trasą i tryb ręczny. Zachowano dotychczasową semantykę wyszukiwania historii.
+Każdy zaktualizowany wariant przeszedł dodatkowo 511 sprawdzeń geometrii/cache oraz 9 kolejki asynchronicznej. Test z oryginalnym EDDiscovery 19.1.11 potwierdził uruchomienie, inicjalizację DLL, odtworzenie ukrytego panelu, ikonę i zamknięcie. Sprawdzono powtarzające się nazwy, brakujące współrzędne, pozycje poza trasą i tryb ręczny. Zachowano dotychczasową semantykę wyszukiwania historii.
 
 Każdy wariant przeszedł 65 sprawdzeń, obejmujących rozdzielenie komanderów, pusty widok, postęp trasy, ponowne otwieranie, nieprawidłowe pozycje, wywołania podczas startu, wyładowanie i ponowne załadowanie DLL, nieudaną inicjalizację oraz odrzucenie niewłaściwej wersji programu. Oba warianty sprawdzono również podczas rzeczywistego uruchomienia niezmodyfikowanego EDDiscovery, inicjalizacji DLL, otwierania panelu i zamykania programu, na osobnych bazach testowych. Bieżące skoki w grze nadal wymagają sprawdzenia przez użytkowników.
 

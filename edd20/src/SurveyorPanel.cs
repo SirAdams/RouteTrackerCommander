@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace EDDiscovery.UserControls
 {
@@ -31,6 +32,7 @@ namespace EDDiscovery.UserControls
         public CommanderSurveyorPanel()
         {
             InitializeComponent();
+            Disposed += (sender, args) => { summaryRefresh.Stop(); signalsRefresh.Stop(); };
             InitializeCopyRouteTargetButton();
             InitializeUpdateButton();
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
@@ -43,7 +45,7 @@ namespace EDDiscovery.UserControls
             edsmSpanshButton.Init(this, "EDSMSpansh", "");
             edsmSpanshButton.ValueChanged += (s, ch) =>
             {
-                DrawAll(cur_sys);
+                if (!loadingCommander) DrawAll(cur_sys);
             };
 
             PopulateCtrlList();
@@ -71,8 +73,9 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.PinState = GetSetting(dbpinstate, true);
 
-            drawsystemupdatetimer = new Timer() { Interval = 500 };
+            drawsystemupdatetimer = new Timer(components) { Interval = 500 };
             drawsystemupdatetimer.Tick += DrawSystemUpdatetimer_Tick;
+            VisibleChanged += (sender, args) => { if (Visible && !IsClosed && !IsDisposed && DiscoveryForm != null && !loadingCommander) DrawAll(cur_sys, true); };
         }
 
         protected override void InitialDisplay()
@@ -87,6 +90,7 @@ namespace EDDiscovery.UserControls
         protected override void Closing()
         {
             StopUpdateChecks();
+            summaryRefresh.Stop(); signalsRefresh.Stop();
             if (DiscoveryForm == null) return;
             drawsystemupdatetimer?.Stop();
 
@@ -103,13 +107,13 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange()
         {
-            SelectCommander(true);
+            bool commanderChanged = SelectCommander(true);
             var hl = DiscoveryForm.History;
             cur_sys = hl.GetLast?.System;      // may be null
             shipfsdinfo = hl.GetLast?.GetJumpInfo(DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(hl.GetLast.MaterialCommodity));
             shipinfo = hl.GetLast?.ShipInformation;
 
-            LoadRoute(GetSetting(dbRouteName, ""), GetSetting(dbRouteManualPos, -1));
+            if (!commanderChanged) LoadRouteCore(GetSetting(dbRouteName, ""), GetSetting(dbRouteManualPos, -1), false);
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber}  History Load '{currentRoute?.Name}' {currentRoute?.Id} systems {currentRoute?.Systems.Count} lastsys '{last_sys?.Name}'");
 
             DrawAll(cur_sys);
@@ -201,6 +205,9 @@ namespace EDDiscovery.UserControls
 
         private void SetVisibility(bool overrideon = false)
         {
+            bool routeWasVisible = extPictureBoxRoute.Visible;
+            bool summaryWasVisible = extPictureBoxScanSummary.Visible;
+            bool systemWasVisible = extPictureBoxScrollSystemDetails.Visible;
             bool showit = true;
 
             // if in autohide, and a transparent option is turned on
@@ -219,6 +226,7 @@ namespace EDDiscovery.UserControls
             extPictureBoxRoute.Visible = (currentRoute != null || RouteTrackerWithoutRoute) && showit;
             extPictureBoxTarget.Visible = showit && !RouteTrackerWithoutRoute && IsSet(RouteControl.showtarget) && TargetClass.IsTargetSet();
             extPictureBoxFuel.Visible = IsSet(RouteControl.showfuel) && showit && !RouteTrackerWithoutRoute;
+            if ((!routeWasVisible && extPictureBoxRoute.Visible) || (!summaryWasVisible && extPictureBoxScanSummary.Visible) || (!systemWasVisible && extPictureBoxScrollSystemDetails.Visible)) DrawAll(cur_sys, true);
         }
 
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
@@ -386,6 +394,7 @@ namespace EDDiscovery.UserControls
         // Display all. If resizeonly is on, the await parts are not recalculated, but are drawn from previous calculated data
         private void DrawAll(ISystem sys, bool resizeonly = false)
         {
+            if (!resizeonly) drawsystemupdatetimer?.Stop();
             //    System.Diagnostics.Debug.WriteLine($"\nSurveyor draw All {presentsystemonly}");
 
             // these calculate and draw quick
@@ -396,10 +405,7 @@ namespace EDDiscovery.UserControls
 
             if (resizeonly)  // used during resize
             {
-                lock (scansummarytext)
-                {
-                    DrawScanSummaryUnlocked();
-                }
+                DrawScanSummaryUnlocked();
                 lock (extPictureBoxScrollSystemDetails)      // because of the async call, we lock the local structures drawsystem* over the draw, so a calculate can't reset them during the draw
                 {
                     DrawSystemUnlocked();
@@ -439,18 +445,18 @@ namespace EDDiscovery.UserControls
 
 
         // calculate then draw the scan summmary info. Await
-        private async void CalculateThenDrawScanSummary(ISystem sys)
+        private async Task CalculateThenDrawScanSummaryCore(ISystem sys, int calculationRequest)
         {
-            if (RouteTrackerWithoutRoute) return;
+            if (IsClosed || IsDisposed || RouteTrackerWithoutRoute || sys != cur_sys) return;
             int calculationGeneration = commanderGeneration;
             // System.Diagnostics.Debug.WriteLine($"Surveyor scan summary ${sys?.Name}");
 
-            scansummarytext = "";
+            string nextSummaryText = "";
 
             if (sys != null)
             {
                 var systemnode = await DiscoveryForm.History.StarScan2.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
-                if (IsClosed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute)   // may close during await..
+                if (IsClosed || IsDisposed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute || !summaryRefresh.IsCurrent(calculationRequest) || sys != cur_sys)   // may close during await..
                     return;
 
                 if (sys != cur_sys)
@@ -466,26 +472,26 @@ namespace EDDiscovery.UserControls
 
                     if (scanned > 0)
                     {
-                        scansummarytext = scansummarytext.AppendPrePad("Scan".Tx()+ " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : ""), Environment.NewLine);
+                        nextSummaryText = nextSummaryText.AppendPrePad("Scan".Tx()+ " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : ""), Environment.NewLine);
                     }
 
                     long value = systemnode.ScanValue(false);   // don't include value of web bodies
 
                     if (value > 0 && IsSet(CtrlList.showValues))
                     {
-                        scansummarytext.AppendPrePad("Scan".Tx()+ " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : "", Environment.NewLine));
-                        scansummarytext = scansummarytext.AppendPrePad("~ " + value.ToString("N0") + " cr" + ";");
+                        nextSummaryText = nextSummaryText.AppendPrePad("~ " + value.ToString("N0") + " cr" + ";");
                     }
                     if (systemnode.FSSTotalNonBodies != null && IsSet(CtrlList.showsignalmismatch))
                     {
-                        scansummarytext = scansummarytext.AppendPrePad(systemnode.FSSTotalNonBodies.Value != clusters ? " Cluster and NonBody counts differ by ".Tx()+ Math.Abs(systemnode.FSSTotalNonBodies.Value - clusters).ToString("N0") : "");
+                        nextSummaryText = nextSummaryText.AppendPrePad(systemnode.FSSTotalNonBodies.Value != clusters ? " Cluster and NonBody counts differ by ".Tx()+ Math.Abs(systemnode.FSSTotalNonBodies.Value - clusters).ToString("N0") : "");
                     }
 
                 }
             }
 
-            lock (scansummarytext)
-                DrawScanSummaryUnlocked();
+            if (IsClosed || IsDisposed || calculationGeneration != commanderGeneration || !summaryRefresh.IsCurrent(calculationRequest) || sys != cur_sys) return;
+            scansummarytext = nextSummaryText;
+            DrawScanSummaryUnlocked();
         }
 
         private void DrawScanSummaryUnlocked()
@@ -494,9 +500,9 @@ namespace EDDiscovery.UserControls
         }
 
         // recalc the system drawSystem* values, then lock, set the locals above, then lock draw
-        async private void CalculateThenDrawSystemSignals(ISystem sys)
+        private async Task CalculateThenDrawSystemSignalsCore(ISystem sys, int calculationRequest)
         {
-            if (RouteTrackerWithoutRoute) return;
+            if (IsClosed || IsDisposed || RouteTrackerWithoutRoute || sys != cur_sys) return;
             int calculationGeneration = commanderGeneration;
             System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor {DisplayNumber} calc system {sys?.Name}");
 
@@ -545,7 +551,7 @@ namespace EDDiscovery.UserControls
                             // await is horrible, anything can happen, even closing
                             await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan2, false); // execute the searches
 
-                            if (IsClosed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute)       // if we was ordered to close, abore
+                            if (IsClosed || IsDisposed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute || !signalsRefresh.IsCurrent(calculationRequest) || sys != cur_sys)       // if we was ordered to close, abore
                                 return;
 
                         }
@@ -562,7 +568,7 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor Find System Async {sys.Name}");
 
                 var systemnode = await DiscoveryForm.History.StarScan2.FindSystemAsync(sys, edsmSpanshButton.WebLookup);
-                if (IsClosed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute)   // may close during await..
+                if (IsClosed || IsDisposed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute || !signalsRefresh.IsCurrent(calculationRequest) || sys != cur_sys)   // may close during await..
                     return;
 
                 // produce body event triggers only if we have seen events, so don't produce them on startup
@@ -803,6 +809,8 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
+                if (IsClosed || IsDisposed || calculationGeneration != commanderGeneration || !signalsRefresh.IsCurrent(calculationRequest) || sys != cur_sys) return;
+
                 // we have collected triggers for this system in cursystriggers
                 // send them out, triaging for triggers already sent by body name
 
@@ -842,7 +850,7 @@ namespace EDDiscovery.UserControls
 
             }       // end sys
 
-            if (IsClosed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute || sys != cur_sys)
+            if (IsClosed || IsDisposed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute || !signalsRefresh.IsCurrent(calculationRequest) || sys != cur_sys || sys != cur_sys)
             {
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} Surveyor Cancelled CalculateThenDrawSystemSignals as cursys has changed during await");
                 return;
@@ -861,6 +869,7 @@ namespace EDDiscovery.UserControls
         // this is not locked. MUST be extenally locked
         private void DrawSystemUnlocked()
         {
+            if (!extPictureBoxScrollSystemDetails.Visible) return;
             System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor present system results");
 
             extPictureBoxSystemDetails.ClearImageList();
@@ -931,6 +940,7 @@ namespace EDDiscovery.UserControls
 
         void ClearThenDrawText(ExtPictureBox pb, string text)
         {
+            if (!ShouldRenderText(pb, text)) return;
             pb.ClearImageList();
             pb.AddPictureTextHorzDivider(new Rectangle(3, 0, Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
                                          null, Size.Empty,

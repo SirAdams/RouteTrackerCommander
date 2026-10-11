@@ -19,7 +19,11 @@ class Smoke {
     Action<string,object> set=(name,value)=>type.GetField(name,flags).SetValue(panel,value);
     Func<string,object> get=name=>type.GetField(name,flags|BindingFlags.Public).GetValue(panel);
     var points=new System.Collections.Generic.List<SavedRouteClass.SystemEntry>{new SavedRouteClass.SystemEntry("Sol","",0,0,0),new SavedRouteClass.SystemEntry("Next","",10,0,0),new SavedRouteClass.SystemEntry("End","",20,0,0)};
+#if EDD20
+    var here=new EliteDangerousCore.SystemClass(0,0,0,"Sol");
+#else
     var here=new EliteDangerousCore.SystemClass("Sol",null,0,0,0);
+#endif
     set("currentRoute",new SavedRouteClass("Render fixture",points));set("manualTarget",1);set("cur_sys",here);set("routecontrolsettings","");
     type.GetMethod("SetVisibility",flags).Invoke(panel,new object[]{false});
     type.GetMethod("DrawRoute",flags).Invoke(panel,new object[]{here});
