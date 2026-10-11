@@ -4,16 +4,36 @@
 
 To samodzielne repozytorium zawiera wyłącznie źródła dodatku, projekt kompilacji, testy i dokumentację. Nie zawiera drzewa źródeł głównego programu EDDiscovery.
 
-Pobieranie: [Route Tracker Commander](https://github.com/SirAdams/RouteTrackerCommander/releases/).
+## Pobieranie
+
+| Paczka | Skan DLL |
+| --- | --- |
+| [1.1.4 — EDD19.x](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD19.x.zip) | [VirusTotal](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
+| [1.1.4 — alias zgodności EDD19.1.11](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD19.1.11.zip) | [Ten sam raport DLL](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
+
+Obie paczki są identyczne. Stara nazwa pozwala wcześniejszym updaterom wykryć wydanie przejściowe. W kolejnych wydaniach 19.x zachowujemy ten alias zgodności. SHA-256 DLL: `ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551`.
+
+[EDDiscovery 20.x — poprzednie wydanie 1.1.3](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.3). Wersja 1.1.4 aktualizuje tylko paczkę dla serii 19.
 
 Dodatek DLL do EDDiscovery dodaje osobny panel **Route Tracker — Commander**. Nie wymaga podmiany pliku EDDiscovery.exe ani bibliotek programu.
 
 Dostępne są dwie osobne paczki:
 
-- **EDD19.1.11**: przetestowana z oryginalnym wydaniem EDDiscovery 19.1.11.0.
+- **EDD19.x**: obecnie obsługuje EDDiscovery 19.1.11; przetestowana z oryginalnym wydaniem EDDiscovery 19.1.11.0.
 - **EDD20.x**: przetestowana z niezmodyfikowanym masterem f9af793b8e4055cc384868fc902efd1c2900a8f0, wersja programu 20.0.0.0. Kolejne wersje 20.x mogą zmienić interfejs paneli i wymagać aktualizacji DLL.
 
 Obie paczki zawierają plik RouteTrackerCommander.dll. Zainstaluj wyłącznie wariant pasujący do Twojego EDDiscovery. Dodatek sprawdza wersję programu podczas inicjalizacji.
+
+Analiza VirusTotal z 2026-10-12: 0 wykryć złośliwych, 0 podejrzanych, 71 wyników bez wykrycia; 4 silniki nie obsługiwały typu pliku. Raport dotyczy DLL zawartej w paczce, nie ZIP-a.
+
+## Zmiany w 1.1.4 (19.x)
+
+- Zapamiętywanie geometrii i długości trasy przy niezmienionej pozycji i trasie.
+- Rysowanie tylko zmienionego tekstu oraz odtwarzanie ukrytych elementów po pokazaniu panelu.
+- Łączenie oczekujących odświeżeń skanów i odrzucanie nieaktualnych wyników przed akcjami i rysowaniem.
+- Usunięcie podwójnego ładowania trasy przy zmianie komandera i zbędnych zapisów ustawień.
+- Zachowanie oryginalnej ikony, śledzenia trasy, schowka i separatorów w przetłumaczonym tekście.
+- Rozpoznawanie nazw EDD19.x oraz EDD19.1.11; preferowana jest nowa nazwa.
 
 ## Możliwości
 
@@ -54,7 +74,7 @@ Wydania testowe są uwzględniane i oznaczane. Nowsze wydanie bez paczki dla wł
 
 Ta funkcja sprawdza dostępność i prowadzi do pobierania; nie pobiera, nie instaluje ani nie podmienia DLL automatycznie. Zamknij EDDiscovery przed instalacją aktualizacji. Główny program nie wymaga zmian.
 
-Logika wyboru wydań ma 19 dodatkowych sprawdzeń offline w tests/UpdateTests.cs. Skompiluj test razem z shared/ReleaseChecker.cs, z referencjami System.Net.Http.dll i System.Web.Extensions.dll. Test nie łączy się z GitHubem.
+Logika wyboru wydań ma 24 dodatkowe sprawdzeń offline w tests/UpdateTests.cs. Skompiluj test razem z shared/ReleaseChecker.cs, z referencjami System.Net.Http.dll i System.Web.Extensions.dll. Test nie łączy się z GitHubem.
 
 ## Aktualizacja i usuwanie
 
@@ -74,6 +94,8 @@ MSBuild RouteTrackerCommander.csproj /t:Rebuild /p:TargetHost=edd20 /p:HostDir="
 Źródła są rozdzielone na edd19/src i edd20/src, ponieważ EDDiscovery 20 zmienia implementację Surveyor/Route Tracker oraz interfejsy tłumaczeń. Wynikowe DLL znajdują się w bin/edd19 lub bin/edd20. Nie używaj ich zamiennie.
 
 ## Testy
+
+Aktualizacja 19.x przeszła dodatkowo 511 sprawdzeń geometrii/cache oraz 9 kolejki asynchronicznej. Test z oryginalnym EDDiscovery 19.1.11 potwierdził uruchomienie, inicjalizację DLL, odtworzenie ukrytego panelu, ikonę i zamknięcie. Sprawdzono powtarzające się nazwy, brakujące współrzędne, pozycje poza trasą i tryb ręczny. Zachowano dotychczasową semantykę wyszukiwania historii.
 
 Każdy wariant przeszedł 65 sprawdzeń, obejmujących rozdzielenie komanderów, pusty widok, postęp trasy, ponowne otwieranie, nieprawidłowe pozycje, wywołania podczas startu, wyładowanie i ponowne załadowanie DLL, nieudaną inicjalizację oraz odrzucenie niewłaściwej wersji programu. Oba warianty sprawdzono również podczas rzeczywistego uruchomienia niezmodyfikowanego EDDiscovery, inicjalizacji DLL, otwierania panelu i zamykania programu, na osobnych bazach testowych. Bieżące skoki w grze nadal wymagają sprawdzenia przez użytkowników.
 

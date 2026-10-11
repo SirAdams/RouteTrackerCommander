@@ -13,9 +13,12 @@ namespace EDDiscovery.UserControls
         {
             return "RouteTrackerCommander_C" + id.ToString(System.Globalization.CultureInfo.InvariantCulture) + "_";
         }
-        private void SelectCommander(bool reload)
+        private bool SelectCommander(bool reload)
         {
-            if (this is CommanderRouteTracker) ApplyCommander(DiscoveryForm.History.CommanderId, reload);
+            if (!(this is CommanderRouteTracker)) return false;
+            int previous = commanderId;
+            ApplyCommander(DiscoveryForm.History.CommanderId, reload);
+            return previous != commanderId;
         }
         internal void ApplyCommander(int next, bool reload)
         {
@@ -25,6 +28,8 @@ namespace EDDiscovery.UserControls
                 PutSetting(dbpinstate, rollUpPanelTop.PinState);
                 PutSetting(dbRouteManualPos, manualTarget);
             }
+            InvalidateRouteGeometry();
+            summaryRefresh.CancelPending(); signalsRefresh.CancelPending();
             commanderId = next;
             commanderGeneration++;
             DBBaseName = CommanderKey(next);
@@ -70,7 +75,7 @@ namespace EDDiscovery.UserControls
                 routecontrolsettings = GetSetting(dbroutecontrol, "showJumps;showwaypoints;shownotetext");
                 rollUpPanelTop.PinState = GetSetting(dbpinstate, true);
                 edsmSpanshButton.Init(this, "EDSMSpansh", "");
-                LoadRoute(GetSetting(dbRouteName, ""), GetSetting(dbRouteManualPos, -1));
+                LoadRouteCore(GetSetting(dbRouteName, ""), GetSetting(dbRouteManualPos, -1), false);
                 // Show a deliberate empty state even for a commander with no history.
                 DrawRoute(null);
                 SetVisibility();

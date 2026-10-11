@@ -61,10 +61,10 @@ namespace EDDiscovery.UserControls
         private void ShowAvailableUpdate()
         {
             if (availableUpdate == null) return;
-            string message = "DLC " + availableUpdate.Version.ToString(3) + (availableUpdate.Preview ? " (preview)" : "") + " is available.\n\nChoose the " + HostAssetSuffix + " ZIP. Close EDDiscovery before replacing the DLL.\n\nOpen the release page?";
+            string message = "DLC " + availableUpdate.Version.ToString(3) + (availableUpdate.Preview ? " (preview)" : "") + " is available.\n\nChoose the " + System.IO.Path.GetFileName(new Uri(availableUpdate.AssetUrl).AbsolutePath) + ". Close EDDiscovery before replacing the DLL.\n\nOpen the release page?";
             if (MessageBox.Show(this, message, "Route Tracker Commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(availableUpdate.ReleaseUrl) { UseShellExecute = true });
         }
-        private const string HostAssetSuffix = "EDD19.1.11";
+        private const string HostAssetSuffix = "EDD19.x";
     }
 }

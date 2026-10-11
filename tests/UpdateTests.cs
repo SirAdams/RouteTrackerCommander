@@ -23,6 +23,15 @@ class UpdateTests {
  var wrong=Release("v1.1.3");wrong["assets"]=new object[]{new Dictionary<string,object>{{"name","unrelated.zip"},{"browser_download_url",""}}};A(Select(wrong)==null,"Unrelated ZIP ignored");
  A(Select(Release("v1.1.3")).ReleaseUrl==ReleaseChecker.Repository+"/releases/tag/v1.1.3","Release URL remains in trusted repository");
  bool invalid=false;try{ReleaseChecker.SelectRelease("{}",new Version(1,1,2,0),"EDD19.1.11");}catch(FormatException){invalid=true;}A(invalid,"Invalid response fails safely");
+ A(Select(Release("v1.1.4","EDD19.x")).AssetUrl.EndsWith("-EDD19.x.zip"),"Legacy host suffix recognises new package");
+ string newOnly=new JavaScriptSerializer().Serialize(new[]{Release("v1.1.4","EDD19.x")});
+ A(ReleaseChecker.SelectRelease(newOnly,new Version(1,1,3,0),"EDD19.x")!=null,"New host suffix recognises new package");
+ string oldOnly=new JavaScriptSerializer().Serialize(new[]{Release("v1.1.4","EDD19.1.11")});
+ A(ReleaseChecker.SelectRelease(oldOnly,new Version(1,1,3,0),"EDD19.x")!=null,"New host suffix recognises legacy package");
+ var dual=Release("v1.1.4","EDD19.1.11");var modern=Release("v1.1.4","EDD19.x");
+ dual["assets"]=new object[]{((object[])dual["assets"])[0],((object[])modern["assets"])[0]};
+ A(Select(dual).AssetUrl.EndsWith("-EDD19.x.zip"),"New package preferred when both names exist");
+ A(ReleaseChecker.SelectRelease(newOnly,new Version(1,1,3,0),"EDD20.x")==null,"20 host rejects 19-series package");
  Console.WriteLine("PASS "+checks+" update selection assertions (offline)");return 0;
  }catch(Exception e){Console.WriteLine(e);return 1;}}
 }

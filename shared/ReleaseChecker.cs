@@ -35,7 +35,7 @@ namespace RouteTrackerCommander
             {
                 client.Timeout = TimeSpan.FromSeconds(15);
                 client.MaxResponseContentBufferSize = 1024 * 1024;
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("RouteTrackerCommander/1.1.3");
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("RouteTrackerCommander/1.1.4");
                 client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
                 return await client.GetStringAsync("https://api.github.com/repos/SirAdams/RouteTrackerCommander/releases?per_page=30").ConfigureAwait(false);
             }
@@ -57,10 +57,16 @@ namespace RouteTrackerCommander
                 if (version <= installed || (best != null && version <= best.Version)) continue;
                 var assets = release.ContainsKey("assets") ? release["assets"] as object[] : null;
                 if (assets == null) continue;
-                var assetName = "RouteTrackerCommander-" + tag.TrimStart('v') + "-" + hostSuffix + ".zip";
-                var assetUrl = Repository + "/releases/download/" + tag + "/" + assetName;
-                if (!assets.OfType<Dictionary<string, object>>().Any(a => Text(a, "name") == assetName && Text(a, "browser_download_url") == assetUrl)) continue;
-                best = new ReleaseUpdate { Version = version, Preview = Flag(release, "prerelease"), ReleaseUrl = Repository + "/releases/tag/" + tag, AssetUrl = assetUrl };
+                var suffixes = hostSuffix == "EDD19.x" || hostSuffix == "EDD19.1.11"
+                    ? new[] { "EDD19.x", "EDD19.1.11" } : new[] { hostSuffix };
+                foreach (var suffix in suffixes)
+                {
+                    var assetName = "RouteTrackerCommander-" + tag.TrimStart('v') + "-" + suffix + ".zip";
+                    var assetUrl = Repository + "/releases/download/" + tag + "/" + assetName;
+                    if (!assets.OfType<Dictionary<string, object>>().Any(a => Text(a, "name") == assetName && Text(a, "browser_download_url") == assetUrl)) continue;
+                    best = new ReleaseUpdate { Version = version, Preview = Flag(release, "prerelease"), ReleaseUrl = Repository + "/releases/tag/" + tag, AssetUrl = assetUrl };
+                    break;
+                }
             }
             return best;
         }

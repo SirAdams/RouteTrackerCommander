@@ -4,15 +4,35 @@
 
 This standalone repository contains only the extension sources, project, tests and documentation. It does not contain the EDDiscovery application source tree.
 
-Downloads: [Route Tracker Commander](https://github.com/SirAdams/RouteTrackerCommander/releases/).
+## Downloads
+
+| Package | DLL scan |
+| --- | --- |
+| [1.1.4 — EDD19.x](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD19.x.zip) | [VirusTotal](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
+| [1.1.4 — EDD19.1.11 compatibility alias](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD19.1.11.zip) | [Same DLL report](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
+
+The two ZIPs are identical. The legacy name lets existing update checkers discover this migration release. Future 19-series updates retain this compatibility alias. DLL SHA-256: `ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551`.
+
+[EDDiscovery 20.x — previous release 1.1.3](https://github.com/SirAdams/RouteTrackerCommander/releases/tag/v1.1.3). Version 1.1.4 updates the 19-series package only.
 
 Standalone managed DLL extension for EDDiscovery. Adds **Route Tracker — Commander** as a separate native panel. No replacement of EDDiscovery.exe or host libraries is required.
 
 Two separate packages are available:
-- **EDD19.1.11**: tested with the original EDDiscovery 19.1.11.0 release.
+- **EDD19.x**: currently supports EDDiscovery 19.1.11; tested with the original EDDiscovery 19.1.11.0 release.
 - **EDD20.x**: tested with unmodified master f9af793b8e4055cc384868fc902efd1c2900a8f0, executable version 20.0.0.0. Future 20.x builds may change the panel API and require an updated DLL.
 
 Both packages contain a file named RouteTrackerCommander.dll. Install only the one matching your host. The extension checks the host version during initialization.
+
+VirusTotal analysis completed on 2026-10-12: 0 malicious, 0 suspicious, 71 undetected; 4 engines did not support this file type. This is the scan of the packaged DLL, not the ZIP.
+
+## Changes in 1.1.4 (19.x)
+
+- Cache route geometry and total distance when the position and route have not changed.
+- Render changed text only, defer hidden rendering and restore it when the panel is shown.
+- Coalesce pending scan refreshes and reject stale results before actions or rendering.
+- Avoid duplicate route loading on commander changes and unchanged settings writes.
+- Preserve the original icon, route/clipboard behavior and text separators in translated route output.
+- Recognize both EDD19.x and EDD19.1.11 update package names, preferring EDD19.x.
 
 ## Features
 
@@ -53,7 +73,7 @@ Preview releases are included and labelled. A newer release without a matching h
 
 This feature checks and links to downloads; it does not automatically download, install or replace DLLs. Close EDDiscovery before installing an update. The main program does not need modification.
 
-Selection logic has 19 additional offline assertions in tests/UpdateTests.cs. Compile that test with shared/ReleaseChecker.cs and references to System.Net.Http.dll and System.Web.Extensions.dll; it does not contact GitHub.
+Selection logic has 24 offline assertions in tests/UpdateTests.cs. Compile that test with shared/ReleaseChecker.cs and references to System.Net.Http.dll and System.Web.Extensions.dll; it does not contact GitHub.
 
 ## Upgrade and remove
 
@@ -73,6 +93,8 @@ MSBuild RouteTrackerCommander.csproj /t:Rebuild /p:TargetHost=edd20 /p:HostDir="
 Sources are split into edd19/src and edd20/src because EDDiscovery 20 changes the Surveyor/Route Tracker implementation and translator APIs. Output DLLs are in bin/edd19 or bin/edd20. Do not interchange them.
 
 ## Validation
+
+The 19.x update additionally passes 511 geometry equivalence/cache checks and 9 asynchronous queue checks. It passed actual unmodified 19.1.11 host startup, DLL initialization, hidden-panel restoration, original-icon and shutdown checks. The geometry tests cover duplicate names, missing coordinates, off-route positions and manual selection. Full-history search semantics are retained.
 
 Each variant passes 65 standalone assertions, including commander isolation, empty state, route progress, reopening, invalid positions, startup callbacks, unload/reload, failed initialization and wrong-host rejection. Both were also tested with the actual unmodified host startup, DLL initialization, native panel display and shutdown, using isolated test databases. Live game jumps still benefit from user testing.
 
