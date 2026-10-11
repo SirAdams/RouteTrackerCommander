@@ -8,17 +8,6 @@ To samodzielne repozytorium zawiera wyłącznie źródła dodatku, projekt kompi
 
 [Pobierz ze strony wydań](https://github.com/SirAdams/RouteTrackerCommander/releases/)
 
-Wybierz paczkę pasującą do swojej wersji EDDiscovery: EDD19.x lub EDD20.x. Na tej samej stronie znajdują się odpowiednie źródła i sumy kontrolne.
-
-### Raporty VirusTotal — wersja 1.1.4
-
-| Wariant DLL | Raport skanowania |
-| --- | --- |
-| EDD19.x | [VirusTotal](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
-| EDD20.x | [VirusTotal](https://www.virustotal.com/gui/file/2f917424a13904f8d4545c066c0edf5ddc29e0e6c322a4c1b4dd50896b77d766) |
-
-Paczka pod starą nazwą EDD19.1.11 jest identycznym aliasem zgodności dla wcześniejszych updaterów. Do weryfikacji źródeł wersji 1.1.4 służą tagi `v1.1.4` dla EDD19 oraz `v1.1.4-edd20` dla EDD20. Manifest każdej kompilacji zawiera dokładny commit źródeł i SHA-256 DLL.
-
 Dodatek DLL do EDDiscovery dodaje osobny panel **Route Tracker — Commander**. Nie wymaga podmiany pliku EDDiscovery.exe ani bibliotek programu.
 
 Dostępne są dwie osobne paczki:
