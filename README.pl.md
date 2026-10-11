@@ -8,13 +8,13 @@ To samodzielne repozytorium zawiera wyłącznie źródła dodatku, projekt kompi
 
 | Paczka | Skan DLL |
 | --- | --- |
-| [1.1.4 — EDD19.x](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD19.x.zip) | [VirusTotal](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
-| [1.1.4 — alias zgodności EDD19.1.11](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD19.1.11.zip) | [Ten sam raport DLL](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
-| [1.1.4 — EDD20.x](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD20.x.zip) | [VirusTotal](https://www.virustotal.com/gui/file/2f917424a13904f8d4545c066c0edf5ddc29e0e6c322a4c1b4dd50896b77d766) |
+| [1.1.4 — EDD19.x](https://github.com/SirAdams/RouteTrackerCommander/releases/) | [VirusTotal](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
+| [1.1.4 — alias zgodności EDD19.1.11](https://github.com/SirAdams/RouteTrackerCommander/releases/) | [Ten sam raport DLL](https://www.virustotal.com/gui/file/ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551) |
+| [1.1.4 — EDD20.x](https://github.com/SirAdams/RouteTrackerCommander/releases/) | [VirusTotal](https://www.virustotal.com/gui/file/2f917424a13904f8d4545c066c0edf5ddc29e0e6c322a4c1b4dd50896b77d766) |
 
 Obie paczki serii 19 są identyczne. Stara nazwa pozwala wcześniejszym updaterom wykryć wydanie przejściowe. W kolejnych wydaniach 19.x zachowujemy ten alias zgodności. SHA-256 DLL: `ce998d2db7cc382b17928d6753487b83c0af6cfc47edd476f3c6e57b68e32551`.
 
-[Źródła odpowiadające paczce EDD20.x](https://github.com/SirAdams/RouteTrackerCommander/releases/download/v1.1.4/RouteTrackerCommander-1.1.4-EDD20.x-source.zip) lub [tag źródeł v1.1.4-edd20](https://github.com/SirAdams/RouteTrackerCommander/tree/v1.1.4-edd20). Dla paczki serii 19 właściwy jest pierwotny tag v1.1.4. Manifest każdej kompilacji wskazuje jej dokładny commit źródeł.
+[Źródła odpowiadające paczce EDD20.x](https://github.com/SirAdams/RouteTrackerCommander/releases/) lub [tag źródeł v1.1.4-edd20](https://github.com/SirAdams/RouteTrackerCommander/tree/v1.1.4-edd20). Dla paczki serii 19 właściwy jest pierwotny tag v1.1.4. Manifest każdej kompilacji wskazuje jej dokładny commit źródeł.
 
 SHA-256 DLL EDD20: `2f917424a13904f8d4545c066c0edf5ddc29e0e6c322a4c1b4dd50896b77d766`. Zakończona analiza VirusTotal również wykazała 0 wyników złośliwych, 0 podejrzanych, 71 bez wykrycia i 4 nieobsługiwane silniki.
 
