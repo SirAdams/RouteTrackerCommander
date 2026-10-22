@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
                 if (currentRouteManualTarget >= 0 && currentRouteManualTarget < knownsystems.Count - 1)        // paranoia
                 {
                     // if we are the target system, increment target
-                    if (cur_sys.Name.EqualsIIC(knownsystems[currentRouteManualTarget].Item1.Name))
+                    if (RouteTrackerCommander.RouteSystemNames.Equal(cur_sys.Name, knownsystems[currentRouteManualTarget].Item1.Name))
                     {
                         currentRouteManualTarget++;
                         System.Diagnostics.Debug.WriteLine($"Saved Route arrived at manual target {cur_sys.Name} Index {currentRouteManualTarget}");

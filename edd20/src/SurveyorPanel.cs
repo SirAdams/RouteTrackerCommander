@@ -760,7 +760,7 @@ namespace EDDiscovery.UserControls
 
                     if ( searchpasslist.HasChars())
                     {
-                        ldrawsystemtext[kvp.Key] = $"{kvp.Key.ReplaceIfStartsWith(sys.Name)}: {searchpasslist}";
+                        ldrawsystemtext[kvp.Key] = $"{RouteTrackerCommander.RouteSystemNames.WithoutSystemPrefix(kvp.Key, sys.Name)}: {searchpasslist}";
                     }
                 }
 
@@ -842,7 +842,7 @@ namespace EDDiscovery.UserControls
                     {
                         v["System"] = sys.Name;
                         v["Body"] = kvp.Key;
-                        v["BodyShortName"] = kvp.Key.ReplaceIfStartsWith(sys.Name).Trim();
+                        v["BodyShortName"] = RouteTrackerCommander.RouteSystemNames.WithoutSystemPrefix(kvp.Key, sys.Name).Trim();
                         System.Diagnostics.Debug.WriteLine($"Surveryor Run Action on Body {kvp.Key} Trigger {v.ToString()}");
                         DiscoveryForm.ActionController.ActionRun(Actions.ActionEventEDList.onSurveyor, v);
                     }

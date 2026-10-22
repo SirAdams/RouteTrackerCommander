@@ -12,12 +12,19 @@ Dodatek DLL do EDDiscovery dodaje osobny panel **Route Tracker — Commander**. 
 
 Dostępne są dwie osobne paczki:
 
-- **EDD19.x**: obecnie obsługuje EDDiscovery 19.1.11; przetestowana z oryginalnym wydaniem EDDiscovery 19.1.11.0.
-- **EDD20.x**: przetestowana z niezmodyfikowanym masterem f9af793b8e4055cc384868fc902efd1c2900a8f0, wersja programu 20.0.0.0. Kolejne wersje 20.x mogą zmienić interfejs paneli i wymagać aktualizacji DLL.
+- **EDD19.x (1.1.4)**: obecnie obsługuje EDDiscovery 19.1.11; przetestowana z oryginalnym wydaniem EDDiscovery 19.1.11.0.
+- **EDD20.x (1.1.5)**: przetestowana z EDDiscovery 20.0.1 i wcześniejszą wersją deweloperską 20.0.0.0. Naprawia niezgodność binarną z BaseUtils wprowadzoną w 20.0.1. Kolejne wersje 20.x mogą zmienić interfejs paneli i wymagać aktualizacji DLL.
 
 Obie paczki zawierają plik RouteTrackerCommander.dll. Zainstaluj wyłącznie wariant pasujący do Twojego EDDiscovery. Dodatek sprawdza wersję programu podczas inicjalizacji.
 
-Analiza VirusTotal z 2026-10-12: 0 wykryć złośliwych, 0 podejrzanych, 71 wyników bez wykrycia; 4 silniki nie obsługiwały typu pliku. Raport dotyczy DLL zawartej w paczce, nie ZIP-a.
+Raporty VirusTotal dla poszczególnych DLL oraz sumy kontrolne znajdują się w opisach odpowiednich wydań.
+
+## Zmiany w 1.1.5 (20.x)
+
+- Naprawiono błąd brakującej metody EqualsIIC przy otwieraniu panelu i przechodzeniu do następnego ręcznie wybranego celu w EDDiscovery 20.0.1.
+- Naprawiono drugie niezgodne wywołanie BaseUtils, używane przy skracaniu nazw ciał niebieskich w wynikach skanowania i akcjach.
+- Zachowano dotychczasowe porównywanie nazw i usuwanie prefiksu układu, korzystając ze standardowych metod .NET.
+- Dodano testy nazw i dotarcia do ręcznie wybranego celu na rzeczywistym hoście. Wersja dla 19.x pozostaje przy 1.1.4.
 
 ## Zmiany w 1.1.4 (19.x i 20.x)
 
@@ -97,3 +104,8 @@ Testy znajdują się w katalogu tests każdego wariantu oraz w tests/StartupSmok
 ## Licencja i pochodzenie
 
 Apache License 2.0; zobacz LICENSE.md. Kod panelu wywodzi się z EDDiscovery i zachowuje oryginalne informacje o prawach autorskich. Wariant dla EDDiscovery 19 bazuje na Release_19.1.11 (a3cbe2190779ea4dcd186db65aeb3f4fa1baccb9); wariant 20 na masterze f9af793b8e4055cc384868fc902efd1c2900a8f0. Jest to dodatek społeczności, a nie oficjalne wydanie EDDiscovery.
+
+
+### Weryfikacja zgodności 1.1.5
+
+636 asercji na każdym z hostów 20.0.0.0 i 20.0.1, w tym 27 asercji nazw i prefiksów w trzech kulturach. Wszystkie 3847 sprawdzonych odwołań binarnych są poprawne na obu hostach. Testy w osobnym profilu 20.0.1 objęły uruchomienie, inicjalizację DLL, dotarcie do celu, odświeżanie i przywracanie panelu, ikonę oraz zamknięcie.

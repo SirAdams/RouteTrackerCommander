@@ -11,12 +11,19 @@ This standalone repository contains only the extension sources, project, tests a
 Standalone managed DLL extension for EDDiscovery. Adds **Route Tracker — Commander** as a separate native panel. No replacement of EDDiscovery.exe or host libraries is required.
 
 Two separate packages are available:
-- **EDD19.x**: currently supports EDDiscovery 19.1.11; tested with the original EDDiscovery 19.1.11.0 release.
-- **EDD20.x**: tested with unmodified master f9af793b8e4055cc384868fc902efd1c2900a8f0, executable version 20.0.0.0. Future 20.x builds may change the panel API and require an updated DLL.
+- **EDD19.x (1.1.4)**: currently supports EDDiscovery 19.1.11; tested with the original EDDiscovery 19.1.11.0 release.
+- **EDD20.x (1.1.5)**: tested with EDDiscovery 20.0.1 and the earlier development 20.0.0.0 host. Fixes the BaseUtils binary incompatibility introduced in 20.0.1. Future 20.x builds may change the panel API and require an updated DLL.
 
 Both packages contain a file named RouteTrackerCommander.dll. Install only the one matching your host. The extension checks the host version during initialization.
 
-VirusTotal analysis completed on 2026-10-12: 0 malicious, 0 suspicious, 71 undetected; 4 engines did not support this file type. This is the scan of the packaged DLL, not the ZIP.
+Package-specific VirusTotal DLL reports and build checksums are provided in each release description.
+
+## Changes in 1.1.5 (20.x)
+
+- Fix the missing EqualsIIC method exception when opening the panel or advancing a manual route target in EDDiscovery 20.0.1.
+- Fix a second incompatible BaseUtils method used when shortening body names in scan output and actions.
+- Preserve the previous case-insensitive name comparison and prefix-removal behavior using standard .NET methods.
+- Add regression coverage for name handling and actual-host manual target arrival. The 19.x package remains at 1.1.4.
 
 ## Changes in 1.1.4 (19.x and 20.x)
 
@@ -86,6 +93,8 @@ MSBuild RouteTrackerCommander.csproj /t:Rebuild /p:TargetHost=edd20 /p:HostDir="
 Sources are split into edd19/src and edd20/src because EDDiscovery 20 changes the Surveyor/Route Tracker implementation and translator APIs. Output DLLs are in bin/edd19 or bin/edd20. Do not interchange them.
 
 ## Validation
+
+Version 1.1.5 passes 636 assertions per 20.x host (development 20.0.0.0 and release 20.0.1), including 27 name/prefix assertions across three cultures. All 3,847 checked binary references resolve on both hosts. Isolated-profile startup, DLL initialization, manual target arrival, cached redraw, hidden-panel restoration, icon and shutdown checks pass on 20.0.1.
 
 Each updated variant additionally passes 511 geometry equivalence/cache checks and 9 asynchronous queue checks. The matching unmodified hosts (19.1.11.0 and development 20.0.0.0) passed startup, DLL initialization, hidden-panel restoration, original-icon and shutdown checks. The geometry tests cover duplicate names, missing coordinates, off-route positions and manual selection. Full-history search semantics are retained.
 
